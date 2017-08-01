@@ -1,0 +1,18 @@
+{
+  "name": "api-router",
+  "version": "1.0.0",
+  "description": "A simple API router for use with nodes http module.",
+  "main": "router.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "api",
+    "routes",
+    "http",
+    "server",
+    "routing"
+  ],
+  "author": "curtis.s.bainbridge@gmail.com",
+  "license": "ISC"
+}
