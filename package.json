@@ -2,7 +2,7 @@
   "name": "api-router",
   "version": "1.0.0",
   "description": "A simple API router for use with nodes http module.",
-  "main": "router.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

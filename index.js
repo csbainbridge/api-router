@@ -40,7 +40,8 @@ function createRouter(methods) {
     var router = function(req, res) {
         switch(req.method) {
             case "GET":
-                router.get(req, res, router.getParams(req.url))
+                var route = router.processParams(req, res);
+                if (route) route.method(req, res, req.obj)
                 break;
             case "POST":
                 router.post(req, res)
@@ -68,16 +69,42 @@ function createRouter(methods) {
      * 
      * @param route (Expects request url)
      */
-    router.getParams = function( route ) {
-        var params = route.split("/");
-
+    router.processParams = function( req, res ) {
+        var params = req.url.split("/");
         var j = params.length;
-        while (j--) if (params[j]==="") params.splice(j,1);
-    
-        var obj = {};
-        for (i=0;i<params.length;i++) i === 1 ? obj.id = params[i] : obj.resource = params[i]
 
-        return obj;
+        // remove empty strings
+        while (j--) if (params[j]==="") params.splice(j,1);
+        
+        var routes = [];
+        var get = methods.get;
+
+        for (i=0;i<Object.keys(get).length;i++) {
+            routes.push(get[i+1].route) 
+        }
+
+        var obj = {};
+
+        for (i=0;i<routes.length;i++) {
+
+            var parts = routes[i].split("/");
+            var k = parts.length;
+
+            while (k--) if (parts[k]==="") parts.splice(k,1);
+
+            if (parts.length === params.length) {
+                for (i=0;i<params.length;i++) obj[parts[i]] = params[i]
+            }
+
+        }
+
+        if ( get[(Object.keys(params).length)] ) {
+            return {
+                method: get[Object.keys(params).length],
+                obj
+            }
+        }
+
     }
 
     // Return configured router object
