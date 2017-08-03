@@ -4,19 +4,31 @@
  * ----------------------------------------
  * apiRouter.js
  * ----------------------------------------
- * var router = require('./router.js');
- * 
- * module.exports = router({
- *  get: function( req, res, params ) {
- *      var resource =
- *  },
- *  post: function( req, res, params ) {
- *      // define post method
- *  },
- *  invalid: function( req, res ) {
- *     // response to client
- *  }
- * })
+ module.exports = router({
+    get: {
+        1: {
+            route: "/resource",
+            method: function( req, res, params ) {
+                url params can be accessed here for database interaction.
+            }
+        },
+        2: {
+            route: "/resource/id",
+            method: function( req, res, params ) {
+                ...
+            }
+        },
+        3: {
+            route: "/resource/id/value",
+            method: function( req, res, params ) {
+                ...
+            }
+        }
+    },
+    invalidRoute: function( req, res ) {
+        console.log("invalid route")
+    }
+});
  * ---------------------------------------
  *  server.js
  * ---------------------------------------
@@ -38,10 +50,12 @@
 function createRouter(methods) {
 
     var router = function(req, res) {
+        
         switch(req.method) {
             case "GET":
                 var route = router.processParams(req, res);
-                if (route) route.method(req, res, req.obj)
+                if (route) route.method(req, res, route.obj)
+                else router.invalidRoute(req, res)
                 break;
             case "POST":
                 router.post(req, res)
@@ -97,12 +111,15 @@ function createRouter(methods) {
             }
 
         }
-
-        if ( get[(Object.keys(params).length)] ) {
+        
+        // undefined routes are ignored and should be handled by the user defined invalidRoute function
+        if (get[(Object.keys(params).length)]) {
             return {
-                method: get[Object.keys(params).length],
+                method: get[(Object.keys(params).length)].method,
                 obj
             }
+        } else {
+            return;
         }
 
     }
