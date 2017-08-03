@@ -26,7 +26,10 @@
         }
     },
     invalidRoute: function( req, res ) {
-        console.log("invalid route")
+        // Required for routes that have not been user defined.
+    },
+    invalidMethod: function( req, res ) {
+        Required for HTTP methods that are not currently supported.
     }
 });
  * ---------------------------------------
